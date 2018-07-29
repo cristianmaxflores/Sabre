@@ -56,7 +56,7 @@ class PlayerList extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log("nextProps")
     console.log(nextProps.PlayerComponent.players)
-    if (nextProps.PlayerComponent.players.length !== 0 && this.props.PlayerComponent.players.length == 0) {
+    if (nextProps.PlayerComponent.players.length !== 0 && this.props.PlayerComponent.players.length === 0) {
       console.log("updating players")
       this.setState({
         arrayOfPlayers: nextProps.PlayerComponent.players
@@ -64,7 +64,7 @@ class PlayerList extends React.Component {
     }
   }
   render() {
-    const { playername, position, age, arrayOfPlayers } = this.state
+    const { playername, age, arrayOfPlayers } = this.state
     return (
       <Container>
         <Segment>
