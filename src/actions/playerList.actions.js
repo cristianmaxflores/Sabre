@@ -3,12 +3,9 @@ import { playerListConstants } from '../constants/playerList.constants'
 export const playerListActions = {
     fetchPlayers
 }
-function handleResponse(response) {
-    return response.json();
-}
 
 function fetchPlayersFromAPI() {
-    return fetch('https://football-players-b31f2.firebaseio.com/players.json').then(handleResponse)
+    return fetch('https://football-players-b31f2.firebaseio.com/players.json').then(response => response.json())
 }
 
 function fetchPlayers() {
