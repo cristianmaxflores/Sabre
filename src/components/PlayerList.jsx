@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
 import { playerListActions } from '../actions/playerList.actions'
+import { publicPlayerListSelectors } from '../rootReducer'
 
 
 const options = [
@@ -28,18 +29,19 @@ class PlayerList extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   handleSubmit = () => {
-    const { playername, position, age, arrayOfPlayers } = this.state
-    const { players } = this.props.PlayerComponent
+    //return console.log(this.props)
+    const { playername, position, age } = this.state
+    const { fetchedPlayers } = this.props
     if (age === "" && position === "" && playername === "") {
       console.log("wrong values! getting all players!")
-      return this.setState({ arrayOfPlayers: players })
+      return this.setState({ arrayOfPlayers: fetchedPlayers })
     }
-    var newArrayOfPlayers = players
+    var newArrayOfPlayers = fetchedPlayers
     if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
-    if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position == position)) }
+    if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position === position)) }
     if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name === playername)) }
     this.setState({ arrayOfPlayers: newArrayOfPlayers })
-    return console.log(arrayOfPlayers)
+    return console.log(newArrayOfPlayers)
   }
 
   getAge = (dateOfBirth) => {
@@ -68,12 +70,10 @@ class PlayerList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("nextProps")
-    console.log(nextProps.PlayerComponent.players)
-    if (nextProps.PlayerComponent.players.length !== 0 && this.props.PlayerComponent.players.length === 0) {
+    console.log(nextProps.fetchedPlayers)
+    if (nextProps.fetchedPlayers.length !== 0 && this.props.fetchedPlayers.length === 0) {
       console.log("updating players")
-      this.setState({
-        arrayOfPlayers: nextProps.PlayerComponent.players
-      })
+      this.setState({ arrayOfPlayers: nextProps.fetchedPlayers })
     }
   }
 
@@ -120,10 +120,9 @@ class PlayerList extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { PlayerComponent } = state;
+function mapStateToProps(store) {
   return {
-    PlayerComponent
+    fetchedPlayers: publicPlayerListSelectors.getPlayers(store)
   };
 }
 const connectedPlayerList = connect(mapStateToProps)(PlayerList);

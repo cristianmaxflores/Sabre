@@ -26,3 +26,13 @@ export function PlayerComponent(state = initialState, action) {
             return state
     }
 }
+
+//private selectors
+
+export const privatePlayerListSelectors = {
+    getPlayers
+}
+
+function getPlayers(store) {
+    return store.players
+}
