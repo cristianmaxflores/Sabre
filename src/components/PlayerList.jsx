@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
+import { playerListActions } from '../actions/playerList.actions'
+
 
 const options = [
   { key: '0', text: 'Attacking Midfield', value: '0' },
@@ -36,6 +38,16 @@ class PlayerList extends React.Component {
       return age - 1
   }
 
+  fetchPlayers = () => {
+    const { dispatch } = this.props;
+    console.log("fetching!")
+    dispatch(playerListActions.fetchPlayers());
+  }
+
+  componentWillMount() {
+    this.fetchPlayers()
+  }
+
   render() {
     console.log(this.props)
     const { players } = this.props.PlayerComponent
@@ -48,7 +60,7 @@ class PlayerList extends React.Component {
               <Form.Input pattern="[ A-Za-z]+" title="Invalid Characters." fluid placeholder='Player Name' />
               <Form.Select fluid options={options} placeholder='Position' />
               <Form.Input type="number" min="18" max="40" fluid placeholder='Age' />
-              <Form.Button>Search</Form.Button>
+              <Form.Button onClick={this.fetchPlayers}>Search</Form.Button>
             </Form.Group>
           </Form>
           <Table celled striped>
@@ -64,14 +76,12 @@ class PlayerList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {players.map((player, index) =>
-                <Table.Row key={index} >
-                  <Table.Cell content={player.name} />
-                  <Table.Cell content={player.position} />
-                  <Table.Cell content={player.nationality} />
-                  <Table.Cell content={this.getAge(player.dateOfBirth)} />
-                </Table.Row >
-              )}
+              {players.map((player, index) => <Table.Row key={index} >
+                <Table.Cell content={player.name} />
+                <Table.Cell content={player.position} />
+                <Table.Cell content={player.nationality} />
+                <Table.Cell content={this.getAge(player.dateOfBirth)} />
+              </Table.Row >)}
             </Table.Body>
           </Table>
         </Segment>
