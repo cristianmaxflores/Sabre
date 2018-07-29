@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
 import { playerListActions } from '../actions/playerList.actions'
-//import { publicPlayerListSelectors } from '../rootReducer'
-import { getPlayersState } from '../reducers/playerList.reducer'
+import { getPlayersState, getStatusState } from '../reducers/playerList.reducer'
 
 
 const options = [
@@ -71,7 +70,7 @@ class PlayerList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log("nextProps")
-    console.log(nextProps.fetchedPlayers)
+    console.log(nextProps)
     if (nextProps.fetchedPlayers.length !== 0 && this.props.fetchedPlayers.length === 0) {
       console.log("updating players")
       this.setState({ arrayOfPlayers: nextProps.fetchedPlayers })
@@ -79,6 +78,7 @@ class PlayerList extends React.Component {
   }
 
   render() {
+    const { status } = this.props
     const { playername, age, arrayOfPlayers } = this.state
     return (
       <Container>
@@ -94,7 +94,7 @@ class PlayerList extends React.Component {
           </Form>
           <Table celled striped>
             <Table.Header>
-              <Table.Row>
+              <Table.Row >
                 <Table.HeaderCell colSpan='4'>Player List</Table.HeaderCell>
               </Table.Row>
               <Table.Row>
@@ -105,6 +105,7 @@ class PlayerList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
+              {status && <Table.Cell error colSpan='4'>Error Fetching Players! Reload the page to fetch again.</Table.Cell>}
               {arrayOfPlayers.map((player, index) =>
                 <Table.Row key={index} >
                   <Table.Cell content={player.name} />
@@ -123,7 +124,8 @@ class PlayerList extends React.Component {
 
 function mapStateToProps(store) {
   return {
-    fetchedPlayers: getPlayersState(store)
+    fetchedPlayers: getPlayersState(store),
+    status: getStatusState(store)
   };
 }
 const connectedPlayerList = connect(mapStateToProps)(PlayerList);

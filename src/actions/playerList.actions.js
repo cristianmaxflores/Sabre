@@ -6,6 +6,7 @@ export const playerListActions = {
 
 function fetchPlayersFromAPI() {
     return fetch('https://football-players-b31f2.firebaseio.com/players.json').then(response => response.json())
+    //return Promise.reject("failed") //return fail promise
 }
 
 function fetchPlayers() {
