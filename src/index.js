@@ -1,8 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import { PlayerList } from './components/PlayerList'
+import appReducer from './rootReducer'
+import thunk from 'redux-thunk'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+
+const store = createStore(
+    appReducer,
+    applyMiddleware(thunk)
+)
+
+render(
+    <Provider store={store}>
+        <PlayerList />
+    </Provider>,
+    document.getElementById('root')
+) 
