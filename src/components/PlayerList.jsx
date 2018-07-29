@@ -39,7 +39,7 @@ class PlayerList extends React.Component {
     var newArrayOfPlayers = fetchedPlayers
     if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
     if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position === position)) }
-    if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name === playername)) }
+    if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name.includes(playername))) }
     this.setState({ arrayOfPlayers: newArrayOfPlayers })
     return console.log(newArrayOfPlayers)
   }
