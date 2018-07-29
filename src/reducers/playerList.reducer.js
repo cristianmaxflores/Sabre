@@ -1,4 +1,6 @@
 import { playerListConstants } from '../constants/playerList.constants'
+import { createSelector } from 'reselect';
+
 const initialState = {
     players: [],
     error: "",
@@ -27,12 +29,8 @@ export function PlayerComponent(state = initialState, action) {
     }
 }
 
-//private selectors
 
-export const privatePlayerListSelectors = {
-    getPlayers
-}
-
-function getPlayers(store) {
-    return store.players
-}
+// selector
+const getPlayers = (state) => state.PlayerComponent.players
+// reselect function
+export const getPlayersState = createSelector([getPlayers], (players) => players)

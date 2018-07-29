@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
 import { playerListActions } from '../actions/playerList.actions'
-import { publicPlayerListSelectors } from '../rootReducer'
+//import { publicPlayerListSelectors } from '../rootReducer'
+import { getPlayersState } from '../reducers/playerList.reducer'
 
 
 const options = [
@@ -122,7 +123,7 @@ class PlayerList extends React.Component {
 
 function mapStateToProps(store) {
   return {
-    fetchedPlayers: publicPlayerListSelectors.getPlayers(store)
+    fetchedPlayers: getPlayersState(store)
   };
 }
 const connectedPlayerList = connect(mapStateToProps)(PlayerList);
