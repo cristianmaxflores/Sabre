@@ -5,16 +5,17 @@ import { playerListActions } from '../actions/playerList.actions'
 
 
 const options = [
-  { key: '0', text: 'Attacking Midfield', value: '0' },
-  { key: '1', text: 'Central Midfield', value: '1' },
-  { key: '2', text: 'Centre-Back', value: '2' },
-  { key: '3', text: 'Centre-Forward', value: '3' },
-  { key: '4', text: 'Defensive Midfield', value: '4' },
-  { key: '5', text: 'Keeper', value: '5' },
-  { key: '6', text: 'Left Midfield', value: '6' },
-  { key: '7', text: 'Left Wing', value: '7' },
-  { key: '8', text: 'Left-Back', value: '8' },
-  { key: '9', text: 'Right-Back', value: '9' },
+  { key: '0', text: 'Position', value: '' },
+  { key: '1', text: 'Attacking Midfield', value: 'Attacking Midfield' },
+  { key: '2', text: 'Central Midfield', value: 'Central Midfield' },
+  { key: '3', text: 'Centre-Back', value: 'Centre-Back' },
+  { key: '4', text: 'Centre-Forward', value: 'Centre-Forward' },
+  { key: '5', text: 'Defensive Midfield', value: 'Defensive Midfield' },
+  { key: '6', text: 'Keeper', value: 'Keeper' },
+  { key: '7', text: 'Left Midfield', value: 'Left Midfield' },
+  { key: '8', text: 'Left Wing', value: 'Left Wing' },
+  { key: '9', text: 'Left-Back', value: 'Left-Back' },
+  { key: '10', text: 'Right-Back', value: 'Right-Back' },
 ]
 
 class PlayerList extends React.Component {
@@ -27,7 +28,18 @@ class PlayerList extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   handleSubmit = () => {
+    const { playername, position, age, arrayOfPlayers } = this.state
+    const { players } = this.props.PlayerComponent
     console.log(this.state)
+    if (age === "" && position === "" && playername === "") {
+      console.log("wrong values! getting all players!")
+      return this.setState({ arrayOfPlayers: players })
+    }
+    var newArrayOfPlayers = players
+    if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
+    if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position == position)) }
+    if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name === playername)) }
+    return this.setState({ arrayOfPlayers: newArrayOfPlayers })
   }
 
   getAge = (dateOfBirth) => {
@@ -53,6 +65,7 @@ class PlayerList extends React.Component {
   componentWillMount() {
     this.fetchPlayers()
   }
+
   componentWillReceiveProps(nextProps) {
     console.log("nextProps")
     console.log(nextProps.PlayerComponent.players)
@@ -63,6 +76,7 @@ class PlayerList extends React.Component {
       })
     }
   }
+
   render() {
     const { playername, age, arrayOfPlayers } = this.state
     return (
