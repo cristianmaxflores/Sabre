@@ -21,7 +21,13 @@ class PlayerList extends React.Component {
 
   constructor() {
     super()
-    this.state = {}
+    this.state = { playername: "", position: "", age: "", arrayOfPlayers: [] }
+  }
+
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  handleSubmit = () => {
+    console.log(this.state)
   }
 
   getAge = (dateOfBirth) => {
@@ -41,26 +47,34 @@ class PlayerList extends React.Component {
   fetchPlayers = () => {
     const { dispatch } = this.props;
     console.log("fetching!")
-    dispatch(playerListActions.fetchPlayers());
+    dispatch(playerListActions.fetchPlayers())
   }
 
   componentWillMount() {
     this.fetchPlayers()
   }
-
+  componentWillReceiveProps(nextProps) {
+    console.log("nextProps")
+    console.log(nextProps.PlayerComponent.players)
+    if (nextProps.PlayerComponent.players.length !== 0 && this.props.PlayerComponent.players.length == 0) {
+      console.log("updating players")
+      this.setState({
+        arrayOfPlayers: nextProps.PlayerComponent.players
+      })
+    }
+  }
   render() {
-    console.log(this.props)
-    const { players } = this.props.PlayerComponent
+    const { playername, position, age, arrayOfPlayers } = this.state
     return (
       <Container>
         <Segment>
           <Header>Football Player Finder</Header>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group widths='equal' inline>
-              <Form.Input pattern="[ A-Za-z]+" title="Invalid Characters." fluid placeholder='Player Name' />
-              <Form.Select fluid options={options} placeholder='Position' />
-              <Form.Input type="number" min="18" max="40" fluid placeholder='Age' />
-              <Form.Button onClick={this.fetchPlayers}>Search</Form.Button>
+              <Form.Input name="playername" value={playername} onChange={this.handleChange} pattern="[ A-Za-z]+" title="Invalid Characters." fluid placeholder='Player Name' />
+              <Form.Select name="position" onChange={this.handleChange} fluid options={options} placeholder='Position' />
+              <Form.Input name="age" value={age} onChange={this.handleChange} type="number" min="18" max="40" fluid placeholder='Age' />
+              <Form.Button type='submit'>Search</Form.Button>
             </Form.Group>
           </Form>
           <Table celled striped>
@@ -76,12 +90,14 @@ class PlayerList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {players.map((player, index) => <Table.Row key={index} >
-                <Table.Cell content={player.name} />
-                <Table.Cell content={player.position} />
-                <Table.Cell content={player.nationality} />
-                <Table.Cell content={this.getAge(player.dateOfBirth)} />
-              </Table.Row >)}
+              {arrayOfPlayers.map((player, index) =>
+                <Table.Row key={index} >
+                  <Table.Cell content={player.name} />
+                  <Table.Cell content={player.position} />
+                  <Table.Cell content={player.nationality} />
+                  <Table.Cell content={this.getAge(player.dateOfBirth)} />
+                </Table.Row >
+              )}
             </Table.Body>
           </Table>
         </Segment>
