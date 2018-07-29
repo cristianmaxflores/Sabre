@@ -30,7 +30,6 @@ class PlayerList extends React.Component {
   handleSubmit = () => {
     const { playername, position, age, arrayOfPlayers } = this.state
     const { players } = this.props.PlayerComponent
-    console.log(this.state)
     if (age === "" && position === "" && playername === "") {
       console.log("wrong values! getting all players!")
       return this.setState({ arrayOfPlayers: players })
@@ -39,7 +38,8 @@ class PlayerList extends React.Component {
     if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
     if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position == position)) }
     if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name === playername)) }
-    return this.setState({ arrayOfPlayers: newArrayOfPlayers })
+    this.setState({ arrayOfPlayers: newArrayOfPlayers })
+    return console.log(arrayOfPlayers)
   }
 
   getAge = (dateOfBirth) => {
