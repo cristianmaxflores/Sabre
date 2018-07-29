@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
 import { playerListActions } from '../actions/playerList.actions'
-import { getPlayersState, getStatusState } from '../reducers/playerList.reducer'
-
+import { getPlayersState, getStatusState, getLoadingState } from '../reducers/playerList.reducer'
 
 const options = [
   { key: '0', text: 'Position', value: '' },
@@ -23,26 +22,23 @@ class PlayerList extends React.Component {
 
   constructor() {
     super()
-    this.state = { playername: "", position: "", age: "", arrayOfPlayers: [] }
+    this.state = { playername: "", position: "", age: "" }//, arrayOfPlayers: [] }
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
-  handleSubmit = () => {
-    //return console.log(this.props)
+  handleFetch = () => {
     const { playername, position, age } = this.state
-    const { fetchedPlayers } = this.props
-    if (age === "" && position === "" && playername === "") {
-      console.log("wrong values! getting all players!")
-      return this.setState({ arrayOfPlayers: fetchedPlayers })
-    }
-    var newArrayOfPlayers = fetchedPlayers
-    if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
-    if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position === position)) }
-    if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name.includes(playername))) }
-    this.setState({ arrayOfPlayers: newArrayOfPlayers })
-    return console.log(newArrayOfPlayers)
+    const { dispatch, loading } = this.props
+    const functionGetAge = this.getAge
+    const params = { playername, position, age, functionGetAge }
+    console.log("fetching!")
+    if (!loading)
+      dispatch(playerListActions.fetchPlayers(params))
+    else
+      console.log("still fetching!")
   }
+
 
   getAge = (dateOfBirth) => {
     let today = new Date()
@@ -58,38 +54,54 @@ class PlayerList extends React.Component {
       return age - 1
   }
 
-  fetchPlayers = () => {
-    const { dispatch } = this.props;
-    console.log("fetching!")
-    dispatch(playerListActions.fetchPlayers())
-  }
+  // handleSubmit = () => {
+  //   //return console.log(this.props)
+  //   const { playername, position, age } = this.state
+  //   const { fetchedPlayers } = this.props
+  //   if (age === "" && position === "" && playername === "") {
+  //     console.log("wrong values! getting all players!")
+  //     return this.setState({ arrayOfPlayers: fetchedPlayers })
+  //   }
+  //   var newArrayOfPlayers = fetchedPlayers
+  //   if (age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (this.getAge(player.dateOfBirth).toString() === age)) }
+  //   if (position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position === position)) }
+  //   if (playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name.includes(playername))) }
+  //   this.setState({ arrayOfPlayers: newArrayOfPlayers })
+  //   return console.log(newArrayOfPlayers)
+  // }
 
-  componentWillMount() {
-    this.fetchPlayers()
-  }
+  // fetchPlayers = () => {
+  //   const { dispatch } = this.props;
+  //   console.log("fetching!")
+  //   dispatch(playerListActions.fetchPlayers())
+  // }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("nextProps")
-    console.log(nextProps)
-    if (nextProps.fetchedPlayers.length !== 0 && this.props.fetchedPlayers.length === 0) {
-      console.log("updating players")
-      this.setState({ arrayOfPlayers: nextProps.fetchedPlayers })
-    }
-  }
+  // componentWillMount() {
+  //   this.fetchPlayers()
+  // }
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log("nextProps")
+  //   console.log(nextProps)
+  //   if (nextProps.fetchedPlayers.length !== 0 && this.props.fetchedPlayers.length === 0) {
+  //     console.log("updating players")
+  //     this.setState({ arrayOfPlayers: nextProps.fetchedPlayers })
+  //   }
+  // }
 
   render() {
-    const { status } = this.props
-    const { playername, age, arrayOfPlayers } = this.state
+    const { status, loading, fetchedPlayers } = this.props
+    const { playername, age } = this.state
     return (
       <Container>
         <Segment>
           <Header>Football Player Finder</Header>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleFetch}>
             <Form.Group widths='equal' inline>
               <Form.Input name="playername" value={playername} onChange={this.handleChange} pattern="[ A-Za-z]+" title="Invalid Characters." fluid placeholder='Player Name' />
               <Form.Select name="position" onChange={this.handleChange} fluid options={options} placeholder='Position' />
               <Form.Input name="age" value={age} onChange={this.handleChange} type="number" min="18" max="40" fluid placeholder='Age' />
-              <Form.Button type='submit'>Search</Form.Button>
+              <Form.Button loading={loading} type='submit'>Search</Form.Button>
             </Form.Group>
           </Form>
           <Table celled striped>
@@ -105,8 +117,8 @@ class PlayerList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {status && <Table.Cell error colSpan='4'>Error Fetching Players! Reload the page to fetch again.</Table.Cell>}
-              {arrayOfPlayers.map((player, index) =>
+              {status && <Table.Cell error colSpan='4'>Error Fetching Players!</Table.Cell>}
+              {fetchedPlayers.map((player, index) =>
                 <Table.Row key={index} >
                   <Table.Cell content={player.name} />
                   <Table.Cell content={player.position} />
@@ -125,7 +137,8 @@ class PlayerList extends React.Component {
 function mapStateToProps(store) {
   return {
     fetchedPlayers: getPlayersState(store),
-    status: getStatusState(store)
+    status: getStatusState(store),
+    loading: getLoadingState(store)
   };
 }
 const connectedPlayerList = connect(mapStateToProps)(PlayerList);

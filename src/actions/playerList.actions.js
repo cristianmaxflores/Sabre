@@ -9,16 +9,16 @@ function fetchPlayersFromAPI() {
     //return Promise.reject("failed") //return fail promise
 }
 
-function fetchPlayers() {
+function fetchPlayers(params) {
     return dispatch => {
         dispatch(request());
         fetchPlayersFromAPI()
             .then(
-                response => dispatch(success(response)),
+                response => dispatch(success(response, params)),
                 error => dispatch(failure(error))
             );
     };
     function request() { return { type: playerListConstants.FETCH_PLAYERLIST_REQUEST } }
-    function success(response) { return { type: playerListConstants.FETCH_PLAYERLIST_SUCCESS, response } }
+    function success(response) { return { type: playerListConstants.FETCH_PLAYERLIST_SUCCESS, response, params } }
     function failure(error) { return { type: playerListConstants.FETCH_PLAYERLIST_FAILURE, error } }
 }
