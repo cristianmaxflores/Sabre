@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
-import { playerListActions } from '../playerList.actions'
-import { getPlayersState, getStatusState, getLoadingState } from '../playerList.reducer'
+import PlayerListprops from '../../PlayerList'
+const { selectors, actions } = PlayerListprops
 
 const options = [
   { key: '0', text: 'Position', value: '' },
@@ -34,7 +34,7 @@ class PlayerList extends React.Component {
     const params = { playername, position, age, functionGetAge }
     console.log("fetching!")
     if (!loading)
-      dispatch(playerListActions.fetchPlayers(params))
+      dispatch(actions.fetchPlayers(params))
     else
       console.log("still fetching!")
   }
@@ -136,9 +136,9 @@ class PlayerList extends React.Component {
 
 function mapStateToProps(store) {
   return {
-    fetchedPlayers: getPlayersState(store),
-    status: getStatusState(store),
-    loading: getLoadingState(store)
+    fetchedPlayers: selectors.getPlayersState(store),
+    status: selectors.getStatusState(store),
+    loading: selectors.getLoadingState(store)
   };
 }
 const connectedPlayerList = connect(mapStateToProps)(PlayerList);
