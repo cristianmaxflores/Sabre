@@ -1,4 +1,4 @@
-import { playerListConstants } from '../constants/playerList.constants'
+import * as actionType from './playerList.actionTypes'
 
 export const playerListActions = {
     fetchPlayers
@@ -18,7 +18,7 @@ function fetchPlayers(params) {
                 error => dispatch(failure(error))
             );
     };
-    function request() { return { type: playerListConstants.FETCH_PLAYERLIST_REQUEST } }
-    function success(response) { return { type: playerListConstants.FETCH_PLAYERLIST_SUCCESS, response, params } }
-    function failure(error) { return { type: playerListConstants.FETCH_PLAYERLIST_FAILURE, error } }
+    function request() { return { type: actionType.FETCH_PLAYERLIST_REQUEST } }
+    function success(response) { return { type: actionType.FETCH_PLAYERLIST_SUCCESS, response, params } }
+    function failure(error) { return { type: actionType.FETCH_PLAYERLIST_FAILURE, error } }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
-import { playerListActions } from '../actions/playerList.actions'
-import { getPlayersState, getStatusState, getLoadingState } from '../reducers/playerList.reducer'
+import { playerListActions } from '../playerList.actions'
+import { getPlayersState, getStatusState, getLoadingState } from '../playerList.reducer'
 
 const options = [
   { key: '0', text: 'Position', value: '' },

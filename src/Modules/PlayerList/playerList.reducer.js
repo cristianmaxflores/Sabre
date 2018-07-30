@@ -1,5 +1,5 @@
-import { playerListConstants } from '../constants/playerList.constants'
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
+import * as actionType from './playerList.actionTypes'
 
 const initialState = {
     players: [],
@@ -9,11 +9,11 @@ const initialState = {
 
 export function PlayerComponent(state = initialState, action) {
     switch (action.type) {
-        case playerListConstants.FETCH_PLAYERLIST_REQUEST:
+        case actionType.FETCH_PLAYERLIST_REQUEST:
             return Object.assign({}, state, {
                 loading: true
-            });
-        case playerListConstants.FETCH_PLAYERLIST_SUCCESS:
+            })
+        case actionType.FETCH_PLAYERLIST_SUCCESS:
             const { params } = action
             if (params.age === "" && params.position === "" && params.playername === "") {
                 console.log("No params")
@@ -21,7 +21,7 @@ export function PlayerComponent(state = initialState, action) {
                     loading: false,
                     error: false,
                     players: action.response
-                });
+                })
             }
             var newArrayOfPlayers = action.response
             if (params.age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (params.functionGetAge(player.dateOfBirth).toString() === params.age)) }
@@ -32,13 +32,13 @@ export function PlayerComponent(state = initialState, action) {
                 loading: false,
                 error: false,
                 players: newArrayOfPlayers
-            });
-        case playerListConstants.FETCH_PLAYERLIST_FAILURE:
+            })
+        case actionType.FETCH_PLAYERLIST_FAILURE:
             console.log(action)
             return Object.assign({}, state, {
                 loading: false,
                 error: true
-            });
+            })
         default:
             return state
     }
