@@ -36,7 +36,8 @@ export function PlayerComponent(state = initialState, action) {
             console.log(action)
             return Object.assign({}, state, {
                 loading: false,
-                error: true
+                error: true,
+                players:[]
             })
         default:
             return state
