@@ -47,10 +47,11 @@ describe('async actions', () => {
     expect(store.getActions()).toEqual(expectedActions)
   })
   it('call fetchPlayers error', () => {
+    store.clearActions()
     fetchMock.get('*', { body: { players: arrayFetched }, headers: { 'content-type': 'application/json' } })
     fetch()
       .then(
-        response => {return Promise.reject("some error")}//return a promise reject to trigger the error dispatch
+        response => { return Promise.reject("some error") }//return a promise reject to trigger the error dispatch
       )
       .then(
         response => store.dispatch(success(response, params)),
@@ -60,7 +61,7 @@ describe('async actions', () => {
   it('check last action to be failure', () => {
     const actualActions = store.getActions()
     const failureAction = { type: actionType.FETCH_PLAYERLIST_FAILURE, error: "some error" }
-    expect(actualActions[2]).toEqual(failureAction)
+    expect(actualActions[0]).toEqual(failureAction)
   })
-}) 
+})
 
