@@ -33,7 +33,6 @@ export function PlayerComponent(state = initialState, action) {
                 players: newArrayOfPlayers
             })
         case actionType.FETCH_PLAYERLIST_FAILURE:
-            console.log(action)
             return Object.assign({}, state, {
                 loading: false,
                 error: true,

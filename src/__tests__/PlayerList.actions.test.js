@@ -64,4 +64,4 @@ describe('async actions', () => {
     expect(actualActions[0]).toEqual(failureAction)
   })
 })
-
+ 
