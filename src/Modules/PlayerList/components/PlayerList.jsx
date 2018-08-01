@@ -40,7 +40,7 @@ class PlayerList extends React.Component {
   }
 
   render() {
-    const { status, loading, fetchedPlayers } = this.props
+    const { error, loading, fetchedPlayers } = this.props
     const { playername, age } = this.state
     return (
       <Container>
@@ -67,7 +67,7 @@ class PlayerList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {status && <Table.Cell error colSpan='4'>Error Fetching Players!</Table.Cell>}
+              {error && <Table.Cell error colSpan='4'>Error Fetching Players!</Table.Cell>}
               {fetchedPlayers.map((player, index) =>
                 <Table.Row key={index} >
                   <Table.Cell content={player.name} />
@@ -85,9 +85,11 @@ class PlayerList extends React.Component {
 }
 
 function mapStateToProps(store) {
+  console.log(selectors.getErrorState(store))
+  console.log(store.PlayerComponent)
   return {
     fetchedPlayers: selectors.getPlayersState(store),
-    status: selectors.getStatusState(store),
+    error: selectors.getErrorState(store),
     loading: selectors.getLoadingState(store)
   };
 }

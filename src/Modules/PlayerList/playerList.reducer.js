@@ -26,7 +26,6 @@ export function PlayerComponent(state = initialState, action) {
             if (params.age !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (params.functionGetAge(player.dateOfBirth).toString() === params.age)) }
             if (params.position !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.position === params.position)) }
             if (params.playername !== "") { newArrayOfPlayers = newArrayOfPlayers.filter(player => (player.name.includes(params.playername))) }
-            console.log(newArrayOfPlayers)
             return Object.assign({}, state, {
                 loading: false,
                 error: false,

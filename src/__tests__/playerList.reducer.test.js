@@ -8,7 +8,7 @@ const initialState = {
     loading: false
 }
 
-function getAge(dateOfBirth) {
+export function getAge(dateOfBirth) {
     let today = new Date()
     let player = new Date(dateOfBirth)
     let age = today.getUTCFullYear() - player.getUTCFullYear()
