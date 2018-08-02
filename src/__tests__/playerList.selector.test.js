@@ -1,6 +1,7 @@
 import { playersReducer as reducer } from '../Modules/PlayerList/playerList.reducer'
 import * as actionType from '../Modules/PlayerList/playerList.actionTypes'
 import * as selectors from '../Modules/PlayerList/playerList.selector'
+import { createSelector } from 'reselect'
 
 //actions
 function request() { return { type: actionType.FETCH_PLAYERLIST_REQUEST } }
@@ -14,6 +15,7 @@ const initialState = {
     }
 }
 
+
 describe('Selectors Tests', () => {
     it("selector unit test getplayers == [{name:'Cristian'}]", () => {
         let store = initialState
@@ -24,43 +26,37 @@ describe('Selectors Tests', () => {
     })
     it("selector unit test error == false", () => {
         let store = initialState
-        const error = selectors.getStatus(store)
+        const error = selectors.getError(store)
         expect(error).toEqual(false)
     })
-    it('reselector unit test for getPlayerState after failure', () => {
+    it('reselector unit test for getPlayerState after fetch failure', () => {
         let store = initialState
-        //reselectors
-        console.log(store)
-        store = reducer(store, request)
-        console.log(store)
+        const getPlayersState = createSelector([selectors.getPlayers], (players) => players)
+        //init
+        expect(getPlayersState(store)).toEqual([{ name: 'Cristian' }])
+        //passing the branch of the store + action to reducer
+        store.playersReducer = reducer(store.playersReducer, request())
         //reselector for players after request
-        expect(selectors.getPlayersState(store)).toEqual([{ name: 'Cristian' }])
-        store = reducer(store, failure)
+        expect(getPlayersState(store)).toEqual([{ name: 'Cristian' }])
+        store.playersReducer = reducer(store.playersReducer, failure("error"))
         //reselector for players after failure
-        expect(selectors.getPlayersState(store)).toEqual([{ name: 'Cristian' }])
+        expect(getPlayersState(store)).toEqual([{ name: 'Cristian' }])
         //check for recomputations == 1
-        expect(selectors.getPlayersState.recomputations()).toEqual(1)
+        expect(getPlayersState.recomputations()).toEqual(1)
     })
-    // it('reselector unit test for getStatusState after failure', () => {
-
-    //     let store = initialState
-    //     //reselector
-    //     const getLoadingState = createSelector([getLoading], (loading) => loading)
-    //     const getErrorState = createSelector([getStatus], (error) => error)
-    //     store = reducer(store, request())
-
-    //     //reselector for status after request
-    //     expect(getErrorState(store)).toEqual(false)
-    //     store = reducer(store.playersReducer, failure("some error"))
-    //     //console.log(getErrorState.recomputations())
-
-    //     //reselector for status after failure
-    //     //console.log(store)
-    //     //console.log(getErrorState(store))
-    //     expect(getStatusState(store)).toEqual(true)
-
-    //     // //check for recomputations == 1
-    //     // expect(getStatusState.recomputations()).toEqual(1)
-    // })
+    it('reselector unit test for getLoading after fetch failure', () => {
+        const getLoadingState = createSelector(selectors.getLoading, loading => loading)
+        const store = initialState
+        //reselector
+        store.playersReducer = reducer(store.playersReducer, request())
+        //reselector for status after request
+        expect(getLoadingState(store)).toEqual(true)
+        //failure deletes all players, set error to true and loading false
+        const storeAfterfailure = { playersReducer : reducer(store.playersReducer, failure("error"))}
+        //reselector for status after failure
+        expect(getLoadingState(storeAfterfailure)).toEqual(false)
+        //check for recomputations == 2
+        expect(getLoadingState.recomputations()).toEqual(2)
+    })
 });
 
