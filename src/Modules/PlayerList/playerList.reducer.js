@@ -6,7 +6,7 @@ const initialState = {
     loading: false
 }
 
-export function PlayerComponent(state = initialState, action) {
+export function playersReducer(state = initialState, action) {
     switch (action.type) {
         case actionType.FETCH_PLAYERLIST_REQUEST:
             return Object.assign({}, state, {

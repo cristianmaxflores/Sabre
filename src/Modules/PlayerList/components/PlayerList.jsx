@@ -85,8 +85,6 @@ class PlayerList extends React.Component {
 }
 
 function mapStateToProps(store) {
-  console.log(selectors.getErrorState(store))
-  console.log(store.PlayerComponent)
   return {
     fetchedPlayers: selectors.getPlayersState(store),
     error: selectors.getErrorState(store),
