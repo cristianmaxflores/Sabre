@@ -19,6 +19,6 @@ function fetchPlayers(params) {
             );
     };
     function request() { return { type: actionType.FETCH_PLAYERLIST_REQUEST } }
-    function success(response) { return { type: actionType.FETCH_PLAYERLIST_SUCCESS, response, params } }
+    function success(response, params) { return { type: actionType.FETCH_PLAYERLIST_SUCCESS, response, params } }
     function failure(error) { return { type: actionType.FETCH_PLAYERLIST_FAILURE, error } }
 }
