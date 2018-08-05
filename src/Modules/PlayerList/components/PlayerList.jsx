@@ -4,7 +4,7 @@ import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
 import PlayerListprops from '../../PlayerList'
 const { selectors, actions, constants } = PlayerListprops
 
-class PlayerList extends React.Component {
+export class PlayerListComponent extends React.Component {
 
   constructor() {
     super()
@@ -14,6 +14,7 @@ class PlayerList extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   handleFetch = () => {
+
     const { playername, position, age } = this.state
     const { dispatch, loading } = this.props
     const functionGetAge = this.getAge
@@ -48,7 +49,7 @@ class PlayerList extends React.Component {
           <Header>Football Player Finder</Header>
           <Form onSubmit={this.handleFetch}>
             <Form.Group widths='equal' inline>
-              <Form.Input name="playername" value={playername} onChange={this.handleChange} pattern="[ A-Za-z]+" title="Invalid Characters." fluid placeholder='Player Name' />
+              <Form.Input name="playername" value={playername} onChange={this.handleChange} pattern="[ A-Za-z]+" fluid placeholder='Player Name' />
               <Form.Select name="position" onChange={this.handleChange} fluid options={constants.FormPlayersPositions} placeholder='Position' />
               <Form.Input name="age" value={age} onChange={this.handleChange} type="number" min="18" max="40" fluid placeholder='Age' />
               <Form.Button loading={loading} type='submit'>Search</Form.Button>
@@ -91,5 +92,5 @@ function mapStateToProps(store) {
     loading: selectors.getLoadingState(store)
   };
 }
-const connectedPlayerList = connect(mapStateToProps)(PlayerList);
+const connectedPlayerList = connect(mapStateToProps)(PlayerListComponent);
 export { connectedPlayerList as PlayerList };
