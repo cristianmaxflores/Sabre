@@ -61,38 +61,40 @@ describe('PlayerList component mount test with real Store to check render   ', (
 describe('dispatch testing with mock fn', () => {
     let wrapper;
     // our mock function to replace the one provided by mapDispatchToProps
-    const mockfn = jest.fn();
+    const mockdispatch = jest.fn();
     beforeEach(() => {
         // pass the mock function as prop 
-        wrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} dispatch={mockfn} />)
+        wrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} dispatch={mockdispatch} />)
     })
     it('should call the mock function on submit', () => {
         wrapper.find('Form').simulate('submit', { preventDefault() { } })
-        expect(mockfn.mock.calls.length).toBe(1)
+        expect(mockdispatch.mock.calls.length).toBe(1)
+    })
+    it('should call the mock function on click', () => {
+        wrapper.find(Form.Button).simulate('click', { preventDefault() { } });
+        expect(mockdispatch.mock.calls.length).toBe(1)
     })
     it('should change playername via test', () => {
         const mockFn = jest.fn();
-        const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} dispatch={mockfn} handleChange={mockFn} />)
+        const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} handleChange={mockFn} />)
         expect(secondWrapper.state('playername')).toEqual('')
         secondWrapper.state().playername = 'test'
         expect(secondWrapper.state('playername')).toEqual('test')
         expect(mockFn.mock.calls.length).toBe(0);
         secondWrapper.unmount();
     })
-    it('should change playername via event', () => {
-        const event = { target: { name: 'playername', value: 'test' } };
-        const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} />)
-        expect(secondWrapper.state('playername')).toEqual('')
-
-        const handleChange = jest.spyOn(secondWrapper.instance(), 'handleChange');
-        secondWrapper.update()
-        secondWrapper.find(Form.Input).at(0).simulate('onChange',event)
-        //expect(handleChange).toBeCalled();
-        //expect(secondWrapper.state('playername')).toEqual('test')
-        secondWrapper.unmount();
-    })
-    // it('should call the mock function on click', () => {
-    //     wrapper.find(Form.Button).simulate('click', { preventDefault() { } });
-    //     expect(mockfn.mock.calls.length).toBe(2)
+    // it('should change playername via event', () => {
+    //     const event = { target: { name: 'playername', value: 'test' } };
+    //     const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} />)
+    //     expect(secondWrapper.state('playername')).toEqual('')
+    //     //secondWrapper.setState({playername:'test'})
+    //     const instance = secondWrapper.instance()
+    //     const handleChange = jest.spyOn(instance, 'handleChange');
+    //     instance.forceUpdate()
+    //     secondWrapper.find(Form.Input).at(1).simulate('onChange', event)
+    //     // instance.forceUpdate()
+    //     expect(handleChange).toBeCalled();
+    //     //expect(secondWrapper.state('playername')).toEqual('test')
+    //     secondWrapper.unmount();
     // })
 })
