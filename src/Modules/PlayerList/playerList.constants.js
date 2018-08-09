@@ -11,3 +11,5 @@ export const FormPlayersPositions = [
     { key: '9', text: 'Left-Back', value: 'Left-Back' },
     { key: '10', text: 'Right-Back', value: 'Right-Back' },
   ]
+
+  export const API_URL = 'https://football-players-b31f2.firebaseio.com/players.json'

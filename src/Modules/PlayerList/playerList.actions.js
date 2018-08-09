@@ -1,24 +1,25 @@
 import * as actionType from './playerList.actionTypes'
+import playerlist from './'
 
 export const playerListActions = {
     fetchPlayers
 }
 
-function fetchPlayersFromAPI() {
-    return fetch('https://football-players-b31f2.firebaseio.com/players.json').then(response => response.json())
+export function fetchPlayersFromAPI() {
+    return fetch(playerlist.constants.API_URL).then(response => response.json())
     //return Promise.reject("failed") //return fail promise
 }
 
-function fetchPlayers(params) {
+export function fetchPlayers(params) {
     return dispatch => {
-        dispatch(request());
+        dispatch(fetchPlayersRequest());
         fetchPlayersFromAPI()
             .then(
-                response => dispatch(success(response, params)),
-                error => dispatch(failure(error))
+                response => dispatch(fetchPlayersSuccess(response, params)),
+                error => dispatch(fetchPlayersFailure(error))
             );
     };
-    function request() { return { type: actionType.FETCH_PLAYERLIST_REQUEST } }
-    function success(response, params) { return { type: actionType.FETCH_PLAYERLIST_SUCCESS, response, params } }
-    function failure(error) { return { type: actionType.FETCH_PLAYERLIST_FAILURE, error } }
 }
+export function fetchPlayersRequest() { return { type: actionType.FETCH_PLAYERLIST_REQUEST } }
+export function fetchPlayersSuccess(response, params) { return { type: actionType.FETCH_PLAYERLIST_SUCCESS, response, params } }
+export function fetchPlayersFailure(error) { return { type: actionType.FETCH_PLAYERLIST_FAILURE, error } }
