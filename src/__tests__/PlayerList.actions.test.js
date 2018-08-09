@@ -57,5 +57,6 @@ describe('async fetch', () => {
   })
   it('should try to fetch players array', () => {
     store.dispatch(actionCreators.fetchPlayers(params))
+    expect(fetchMock.called()).toEqual(true)
   })
 })
