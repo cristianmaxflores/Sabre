@@ -1,6 +1,5 @@
 import { PlayerList, PlayerListComponent } from '../Modules/PlayerList/components/PlayerList'
 import { Segment, Container, Form, Header, Table } from 'semantic-ui-react'
-
 import React from 'react';
 import { mount } from 'enzyme';
 import Enzyme from 'enzyme';

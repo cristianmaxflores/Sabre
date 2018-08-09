@@ -1,9 +1,14 @@
 {
   "name": "sabre",
   "jest": {
+    "verbose": true,
     "testURL": "http://localhost/",
     "transform": {
-      "^.+\\.js$": "babel-jest"
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "globals": {
+      "NODE_ENV": "test"
     },
     "moduleFileExtensions": [
       "js",
@@ -11,13 +16,7 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "bower_components"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "react"
+      "src/"
     ]
   },
   "version": "0.1.0",
@@ -42,7 +41,10 @@
   },
   "devDependencies": {
     "babel-jest": "^23.4.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^23.4.2",
