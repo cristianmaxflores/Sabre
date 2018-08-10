@@ -96,4 +96,28 @@ describe('dispatch testing with mock fn', () => {
     //     //expect(secondWrapper.state('playername')).toEqual('test')
     //     secondWrapper.unmount();
     // })
+    it('test component method getAge', () => {
+        const date = "1993-05-13"   //should return 25
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(25)
+    })
+    it('test component method getAge (second return)', () => {
+        const date = "1993-12-13"   //should return 24
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(24)
+    })
+    it('test component method getAge (third return)', () => {
+        const date = "1993-08-01"   //should return 25
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(25)
+    })
+    it('test component method getAge (fourth return)', () => {
+        const date = "1993-08-30"   //should return 24
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(24)
+    })
 })
