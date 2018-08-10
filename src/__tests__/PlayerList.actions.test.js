@@ -34,14 +34,15 @@ describe('async actions', () => {
   })
   it('call fetchPlayers error', () => {
     store.clearActions()
-    fetchMock.get('*', { body: { players: arrayFetched }, headers: { 'content-type': 'application/json' } })
+    fetchMock.mock('*', () => { throw new Error('some error') })
     fetch()
       .then(
-        response => { return Promise.reject("some error") }//return a promise reject to trigger the error dispatch
+        //response => { return Promise.reject("some error") }//return a promise reject to trigger the error dispatch
+        response => response.json()
       )
       .then(
         response => store.dispatch(actionCreators.fetchPlayersSuccess(response, params)),
-        error => store.dispatch(actionCreators.fetchPlayersFailure(error))
+        error => store.dispatch(actionCreators.fetchPlayersFailure(error.message))
       );
   })
   it('check last action to be failure', () => {
