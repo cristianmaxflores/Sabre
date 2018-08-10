@@ -53,10 +53,15 @@ describe('async actions', () => {
 
 describe('async fetch', () => {
   beforeAll(() => {
-    fetchMock.getOnce(API_URL, { body: { players: [] }, headers: { 'content-type': 'application/json' } })
+    fetchMock.get(API_URL, { body: { players: [] }, headers: { 'content-type': 'application/json' } })
   })
-  it('should try to fetch players array', () => {
+  it('should try to dispatch async fetch', () => {
     store.dispatch(actionCreators.fetchPlayers(params))
+    expect(fetchMock.called()).toEqual(true)
+  })
+  it('should try to fetch players from api', () => {
+    fetchMock.reset()
+    actionCreators.fetchPlayersFromAPI()
     expect(fetchMock.called()).toEqual(true)
   })
 })
