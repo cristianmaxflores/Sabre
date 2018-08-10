@@ -52,19 +52,19 @@ export class PlayerListComponent extends React.Component {
               <Form.Input name="playername" value={playername} onChange={this.handleChange} pattern="[ A-Za-z]+" fluid placeholder='Player Name' />
               <Form.Select name="position" onChange={this.handleChange} fluid options={constants.FormPlayersPositions} placeholder='Position' />
               <Form.Input name="age" value={age} onChange={this.handleChange} type="number" min="18" max="40" fluid placeholder='Age' />
-              <Form.Button loading={loading} type='submit'>Search</Form.Button>
+              <Form.Button color='green' loading={loading} type='submit'>Search</Form.Button>
             </Form.Group>
           </Form>
-          <Table celled striped>
+          <Table celled striped unstackable>
             <Table.Header>
               <Table.Row >
                 <Table.HeaderCell colSpan='4'>Player List</Table.HeaderCell>
               </Table.Row>
-              <Table.Row>
-                <Table.HeaderCell content='Player' />
-                <Table.HeaderCell content='Position' />
-                <Table.HeaderCell content='Nationality' />
-                <Table.HeaderCell content='Age' />
+              <Table.Row >
+                <Table.HeaderCell width={2} content='Player'  />
+                <Table.HeaderCell width={2} content='Position'  />
+                <Table.HeaderCell width={2} content='Nationality'  />
+                <Table.HeaderCell width={2} content='Age' />
               </Table.Row>
             </Table.Header>
             <Table.Body>

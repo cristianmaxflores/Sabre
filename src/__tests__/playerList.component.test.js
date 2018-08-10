@@ -49,7 +49,19 @@ describe('PlayerList component mount test with real Store to check render   ', (
         expect(wrapper.find(Form.Input).length).toEqual(2)
     })
 
-
+    it('should render table with one player', () => {
+        wrapper.setProps({
+            fetchedPlayers: [{
+                "contractUntil": "2022-06-30",
+                "dateOfBirth": "1993-05-13",
+                "jerseyNumber": 9,
+                "name": "Romelu Lukaku",
+                "nationality": "Belgium",
+                "position": "Centre-Forward"
+            }]
+        })
+        expect(wrapper.find(Table.Row).length).toEqual(2)
+    })
 
     it('should unmount component`', () => {
         wrapper.unmount();
@@ -69,10 +81,17 @@ describe('dispatch testing with mock fn', () => {
         wrapper.find('Form').simulate('submit', { preventDefault() { } })
         expect(mockdispatch.mock.calls.length).toBe(1)
     })
-    it('should call the mock function on click', () => {
-        wrapper.find(Form.Button).simulate('click', { preventDefault() { } });
-        expect(mockdispatch.mock.calls.length).toBe(1)
+    it('should return still fetching in console log', () => {
+        jest.spyOn(global.console, 'log')
+        wrapper.setProps({ loading: true });
+        wrapper.find('Form').simulate('submit', { preventDefault() { } })
+        expect(console.log).toBeCalled()
     })
+    //simulates does nothing
+    // it('should call the mock function on click', () => {
+    //     wrapper.find(Form.Button).simulate('click', { preventDefault() { } });
+    //     expect(mockdispatch.mock.calls.length).toBe(1)
+    // })
     it('should change playername via test', () => {
         const mockFn = jest.fn();
         const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} handleChange={mockFn} />)
@@ -82,6 +101,7 @@ describe('dispatch testing with mock fn', () => {
         expect(mockFn.mock.calls.length).toBe(0);
         secondWrapper.unmount();
     })
+    //simulates does nothing
     // it('should change playername via event', () => {
     //     const event = { target: { name: 'playername', value: 'test' } };
     //     const secondWrapper = shallow(<PlayerListComponent fetchedPlayers={[]} error={false} loading={false} />)
@@ -96,4 +116,28 @@ describe('dispatch testing with mock fn', () => {
     //     //expect(secondWrapper.state('playername')).toEqual('test')
     //     secondWrapper.unmount();
     // })
+    it('test component method getAge', () => {
+        const date = "1993-05-13"   //should return 25
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(25)
+    })
+    it('test component method getAge (second return)', () => {
+        const date = "1993-12-13"   //should return 24
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(24)
+    })
+    it('test component method getAge (third return)', () => {
+        const date = "1993-08-01"   //should return 25
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(25)
+    })
+    it('test component method getAge (fourth return)', () => {
+        const date = "1993-08-30"   //should return 24
+        const instance = wrapper.instance()
+        const result = instance.getAge(date)
+        expect(result).toEqual(24)
+    })
 })

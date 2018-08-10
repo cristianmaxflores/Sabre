@@ -34,14 +34,15 @@ describe('async actions', () => {
   })
   it('call fetchPlayers error', () => {
     store.clearActions()
-    fetchMock.get('*', { body: { players: arrayFetched }, headers: { 'content-type': 'application/json' } })
+    fetchMock.mock('*', () => { throw new Error('some error') })
     fetch()
       .then(
-        response => { return Promise.reject("some error") }//return a promise reject to trigger the error dispatch
+        //response => { return Promise.reject("some error") }//return a promise reject to trigger the error dispatch
+        response => response.json()
       )
       .then(
         response => store.dispatch(actionCreators.fetchPlayersSuccess(response, params)),
-        error => store.dispatch(actionCreators.fetchPlayersFailure(error))
+        error => store.dispatch(actionCreators.fetchPlayersFailure(error.message))
       );
   })
   it('check last action to be failure', () => {
@@ -53,9 +54,15 @@ describe('async actions', () => {
 
 describe('async fetch', () => {
   beforeAll(() => {
-    fetchMock.getOnce(API_URL, { body: { players: [] }, headers: { 'content-type': 'application/json' } })
+    fetchMock.get(API_URL, { body: { players: [] }, headers: { 'content-type': 'application/json' } })
   })
-  it('should try to fetch players array', () => {
+  it('should try to dispatch async fetch', () => {
     store.dispatch(actionCreators.fetchPlayers(params))
+    expect(fetchMock.called()).toEqual(true)
+  })
+  it('should try to fetch players from api', () => {
+    fetchMock.reset()
+    actionCreators.fetchPlayersFromAPI()
+    expect(fetchMock.called()).toEqual(true)
   })
 })
